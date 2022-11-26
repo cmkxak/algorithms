@@ -23,7 +23,7 @@ distance = [INF] * (n+1) #무한으로 초기화
 
 def dijkstra(x):
     q = []
-    heapq.heappush(q, (0, start)) #시작 노드 삽입
+    heapq.heappush(q, (0, start)) #시작 노드 삽입, 최소 힙 사용
     distance[start] = 0
 
     while q:
