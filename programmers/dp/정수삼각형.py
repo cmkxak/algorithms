@@ -12,4 +12,4 @@ def solution(triangle):
             else:
                 triangle[i][j] += max(triangle[i-1][j-1], triangle[i-1][j])
 
-    return max(triangle[1]) #마지막 원소들 중 최솟값 반환
+    return max(triangle[-1]) #마지막 원소들 중 최솟값 반환
