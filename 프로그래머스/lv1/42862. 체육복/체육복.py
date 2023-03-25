@@ -1,15 +1,28 @@
 def solution(n, lost, reserve):
-    reserve_stu = set(reserve) - set(lost)
-    lost_stu = set(lost) - set(reserve)
-    
-    #빌려줄 수 있는 학생을 기준으로 최대한 많이 빌려준다.
-    for i in reserve_stu:
-        front = i-1
-        back = i+1
+    answer =0
+    #1. 전처리, 체육복을 가진 학생의 상태를 저장하는 student 배열 생성
+    student= [0] * (n+2)
 
-        if front in lost_stu:
-            lost_stu.remove(front)
-        elif back in lost_stu:
-            lost_stu.remove(back)
-    print(n-len(lost_stu))
-    return n - len(lost_stu)
+    #student 배열에 각 상태에 알맞은 숫자를 삽입
+    for i in lost:
+        student[i] -=1
+    for i in reserve:
+        student[i] +=1
+    #이제 현재 상태에서 빌려줄 수 있는 경우를 모두 세주고, 체육에 참여할 수 있는 학생 수를 구한다.
+    for i in range(1, n+1):
+        if student[i] > 0:
+            front = i-1
+            back= i+1
+
+            if student[front] < 0:
+                student[i]-=1
+                student[front]+=1
+
+            elif student[back] < 0:
+                student[i]-=1
+                student[back]+=1
+                
+    for i in range(1,n+1):
+        if student[i] >= 0:
+            answer+=1
+    return answer
