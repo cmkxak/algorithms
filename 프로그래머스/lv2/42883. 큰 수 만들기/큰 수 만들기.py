@@ -1,8 +1,15 @@
 def solution(number, k):
-    stack=[]
-    for i in number:
-        while k > 0 and stack and stack[-1] < i:
-            stack.pop()
-            k-=1
-        stack.append(i)
-    return ''.join(stack[:-k] if k > 0 else stack)
+    answer = ''
+    number=list(number)
+    print(number)
+    
+    min=int(1e9)
+    for i in range(len(number)):
+        if min > int(number[i]):
+            min=int(number[i])
+            number.remove(number[i])
+    print(number)
+    
+    
+    
+    return answer
