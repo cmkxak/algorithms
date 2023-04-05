@@ -1,59 +1,47 @@
-# 문자열 p를 u, v로 분리하는 함수
-def divide(p):
-    open_p = 0
-    close_p = 0
-
+def divide_str(p):
+    o_count, c_count = 0,0
+    
     for i in range(len(p)):
         if p[i] == '(':
-            open_p += 1
+            o_count+=1
         else:
-            close_p += 1
-        if open_p == close_p:
-            return p[:i + 1], p[i + 1:]
+            c_count+=1
+        
+        if o_count == c_count:
+            return p[:i+1], p[i+1:] 
 
-
-# 문자열 u가 올바른 괄호 문자열인지 확인하는 함수
-def check(u):
+#올바른 괄호인지 체크
+def is_balanced_str(words):
     stack = []
 
-    for p in u:
-        if p == '(':
-            stack.append(p)
+    for i in words:
+        if i == '(':
+            stack.append('(')
         else:
             if not stack:
                 return False
             stack.pop()
-
     return True
 
-
 def solution(p):
-    # 과정 1
+    #과정 1
     if not p:
-        return ""
+        return ''
+    
+    #과정 2
+    u,v = divide_str(p)
 
-    # 과정 2
-    u, v = divide(p)
-
-    # 과정 3
-    if check(u):
-        # 과정 3-1
+    #과정 3 :올바른 괄호 문자열이면, 문자열 v에 대해 1단계부터 다시 수행
+    if is_balanced_str(u):
         return u + solution(v)
-    # 과정 4
+    #과정 4 : 올바른 괄호 문자열이 아니라면
     else:
-        # 과정 4-1
-        answer = '('
-        # 과정 4-2
-        answer += solution(v)
-        # 과정 4-3
-        answer += ')'
-
-        # 과정 4-4
-        for p in u[1:len(u) - 1]:
-            if p == '(':
-                answer += ')'
+        new_str= '('
+        new_str+= solution(v)
+        new_str+= ')'
+        for i in u[1:len(u)-1]:
+            if i =='(':
+                new_str += ')'
             else:
-                answer += '('
-
-        # 과정 4-5
-        return answer
+                new_str += '('
+        return new_str
