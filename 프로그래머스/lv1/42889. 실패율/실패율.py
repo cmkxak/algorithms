@@ -1,26 +1,25 @@
 def solution(N, stages):
-    answer = []
-    result = []
+    failure = [0] * (N+2)
+    tmp,answer = [],[]
+    prev_lv_people,result = 0,0
     
-    #각 단계 수 
-    for i in range(1, N+1):
-        stop_player = 0
-        success_player = 0 
+    stages.sort()
     
-        for j in stages: # 사용자가 멈춰 있는 스테이지의 번호 동안
-            if i < j:
-                success_player+=1
-            elif i == j :
-                success_player +=1 
-                stop_player +=1
-        try:
-            answer.append((i, stop_player / success_player))
-        except:
-            answer.append((i, 0))
-            
-    answer.sort(key=lambda x: x[1], reverse=True)
+    for i in stages:
+        failure[i] +=1
+    
+    for i in range(1,len(failure)-1):
+        prev_lv_people+= failure[i-1]
         
-    for i in answer:
-        result.append(i[0])
-                
-    return result
+        if failure[i] == 0:
+            result = 0
+        else:
+            result = failure[i] / (len(stages)-prev_lv_people)
+            
+        tmp.append((i, result))    
+    
+    tmp.sort(reverse=True,key=lambda x:x[1])
+    
+    for i,val in tmp:
+        answer.append(i)
+    return answer
