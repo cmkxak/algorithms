@@ -2,9 +2,7 @@ def solution(N, stages):
     failure = [0] * (N+2)
     tmp,answer = [],[]
     prev_lv_people,result = 0,0
-    
-    stages.sort()
-    
+        
     for i in stages:
         failure[i] +=1
     
