@@ -25,7 +25,6 @@ def dfs(graph, visited,i):
 
     for k in graph[i]:
         if not visited[k]:
-            visited[k] = True
             dfs(graph, visited, k)
 
 n,m,s = map(int, input().split())
