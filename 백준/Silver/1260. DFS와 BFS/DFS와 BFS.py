@@ -1,35 +1,46 @@
 from collections import deque
-def dfs(adj,v,visited):
-    visited[v] = True
-    print(v, end = ' ')
-    for i in adj[v]:
-        if not visited[i]:
-            dfs(adj,i,visited)
+import sys
+input = sys.stdin.readline
+sys.setrecursionlimit(100000)
 
-def bfs(adj,v,visited):
-    queue = deque([v])
-    visited = [False] * (n+1)
-    visited[v] = True
+def bfs(start,visited,graph):
+    queue = deque()
+    queue.append(start)
+    visited[start] = True
+
     while queue:
-        vertex = queue.popleft()
-        print(vertex, end = ' ')
-        for i in adj[vertex]:
+        x = queue.popleft()
+
+        print(x, end = ' ')
+
+        for i in graph[x]:
             if not visited[i]:
-                queue.append(i)
                 visited[i] = True
+                queue.append(i)
 
-n,m,v = map(int, input().split())
-adj = [[] for _ in range(n+1)]
+def dfs(graph, visited,i):
+    visited[i] = True
 
-for _ in range(m):
-    a = input().split()
-    adj[int(a[0])].append(int(a[1]))
-    adj[int(a[1])].append(int(a[0]))
+    print(i, end=' ')
 
-visited = [False] * (n+1)
+    for k in graph[i]:
+        if not visited[k]:
+            visited[k] = True
+            dfs(graph, visited, k)
 
-for i in adj:
+n,m,s = map(int, input().split())
+graph = [[] for _ in range(n+1)]
+visited= [False] * (n+1)
+visited2= [False] * (n+1)
+
+for i in range(m):
+    a,b = map(int, input().split())
+    graph[a].append(b)
+    graph[b].append(a)
+
+for i in graph:
     i.sort()
-dfs(adj,v,visited)
+
+dfs(graph,visited,s)
 print()
-bfs(adj,v,visited)
+bfs(s,visited2,graph)
