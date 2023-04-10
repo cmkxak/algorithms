@@ -1,23 +1,18 @@
+#압축하여 표현한 문자열 중 가장 짧은 것의 길이를 리턴하도록 솔루션 함수를 완성해라.
 def solution(s):
     answer = len(s)
-    
-    for step in range(1, len(s) //2 + 1):
-        compressed=""
-        prev = s[:step]
-        cnt=1
+    for step in range(1,len(s)//2 + 1):
+        cur = s[:step] 
+        cnt = 1
+        tmp = ''
         for j in range(step, len(s), step):
-            #이전 상태와 동일하다면 같은 것의 개수 증가
-            if prev == s[j: j+step]:
-                cnt+=1
-            #이전 상태와 동일하지 않다면 압축을 진행하고 비교대상과 개수를 갱신 
+            next = s[j:j+step]
+            if cur == next:
+                cnt+=1            
             else:
-                compressed+=str(cnt) + prev if cnt >=2 else prev
-                prev = s[j: j+step]
+                tmp+= (str(cnt) + cur) if cnt>=2 else cur
+                cur = next
                 cnt=1
-        
-        #남은 문자열에 대해 처리
-        compressed+= str(cnt) + prev if cnt >=2 else prev
-        
-        #만들어지는 압축 문자열이 가장 짧은 것이 정답 
-        answer = min(answer, len(compressed))
+        tmp+=str(cnt) + cur if cnt>=2 else cur #마지막 문자열 더해줌
+        answer = min(answer, len(tmp))
     return answer
