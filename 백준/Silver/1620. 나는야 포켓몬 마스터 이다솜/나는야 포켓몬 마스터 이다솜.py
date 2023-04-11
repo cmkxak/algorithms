@@ -8,14 +8,10 @@ for i in range(1,n+1):
     pocketmon[i] = name
     pocketmon2[name] = i
 
-answer=[]
 for i in range(m):
     question = input().rstrip()
     if question.isdigit():
-        answer.append(pocketmon[int(question)])
+        print(pocketmon[int(question)])
     else:
         #문자가 들어온 경우
-        answer.append(pocketmon2[question])
-
-for i in answer:
-    print(i)
+        print(pocketmon2[question])
