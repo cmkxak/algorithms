@@ -1,32 +1,37 @@
-import sys
 from collections import deque
+import sys
 input = sys.stdin.readline
 
-n,m,k,x = map(int, input().split())
-adj_list = [[] for _ in range(n + 1)] #인접 리스트
-visited = [-1] * (n+1)
+def bfs(start, dist):
+    answer = []
+    queue = deque()
+    queue.append((start, dist))
+    visited[start] = True
 
-for _ in range(m):
+    while queue:
+        x,dist = queue.popleft()
+
+        if dist == k:
+            answer.append(x)
+
+        for i in adj_list[x]:
+            if not visited[i]:
+                visited[i] = True
+                queue.append((i, dist+1))
+    return answer
+
+n,m,k,x= map(int, input().split())
+adj_list = [[] for _ in range(n+1)] #인접 리스트
+
+for i in range(m):
     s,e = map(int, input().split())
     adj_list[s].append(e)
 
-def bfs(start):
-    queue=deque()
-    queue.append(start)
-    visited[start]+=1
+visited = [False] * (n+1)
 
-    while queue:
-        now_node = queue.popleft()
+result = bfs(x, 0)
 
-        for new_node in adj_list[now_node]:
-            if visited[new_node] == -1:
-                queue.append(new_node)
-                visited[new_node] = visited[now_node] + 1
-bfs(x)
-result = []
-for i in range(n+1):
-    if visited[i] == k:
-        result.append(i)
+result.sort()
 if result:
     for i in result:
         print(i)
