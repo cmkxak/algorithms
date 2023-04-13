@@ -1,53 +1,58 @@
-import copy
+from itertools import combinations
 from collections import deque
-n,m = map(int, input().split())
-graph = [list(map(int, input().split()))for _ in range(n)]
-result = 0
+import copy
+import sys
+input = sys.stdin.readline
 
-def get_score(graph):
-    score = 0
-    for i in range(n):
-        for j in range(m):
-            if graph[i][j] == 0:
-                score +=1
-    return score
+dx = [-1, 1, 0, 0]
+dy = [0, 0, -1, 1]
 
-dx=[-1,1,0,0]
-dy=[0,0,-1,1]
-#벽 세개 완성되었으면 바이러스의 위치에서 전파 시작
-def virus():
-    global result
-    queue=deque()
-    tmp_graph = copy.deepcopy(graph)
-    for i in range(n):
-        for j in range(m):
-            if tmp_graph[i][j] == 2:
-                queue.append((i,j))
+def bfs(w1,w2,w3):
+    tmp = copy.deepcopy(graph)
+    tmp[w1[0]][w1[1]] = 1
+    tmp[w2[0]][w2[1]] = 1
+    tmp[w3[0]][w3[1]] = 1
 
+    queue = deque()
+    for i, j in virus:
+        queue.append((i, j))
+
+    answer = 0
     while queue:
-        x,y = queue.popleft()
+        x, y = queue.popleft()
 
         for i in range(4):
             nx = x + dx[i]
             ny = y + dy[i]
 
-            if 0<=nx<n and 0<=ny<m:
-                if tmp_graph[nx][ny] == 0:
-                    tmp_graph[nx][ny] = 2
-                    queue.append((nx,ny))
-    result = max(result, get_score(tmp_graph))
-    return result
+            if 0 <= nx < m and 0 <= ny < n and tmp[nx][ny] != 1:
+                if tmp[nx][ny] == 0:
+                    tmp[nx][ny] = 2  # 바이러스 전파
+                    queue.append((nx, ny))
+    for i in range(m):
+        for j in range(n):
+            if tmp[i][j] == 0:
+                answer += 1
+    return answer
 
-def makeWall(cnt):
-    if cnt == 3:
-        virus()
-        return
+m, n = map(int, input().split())
+graph = []
+for i in range(m):
+    graph.append(list(map(int, input().split())))
 
-    for i in range(n):
-        for j in range(m):
-            if graph[i][j] == 0:
-                graph[i][j] = 1 #벽 설치
-                makeWall(cnt+1)
-                graph[i][j] = 0
-makeWall(0)
+virus = []
+wall = []
+
+for i in range(m):
+    for j in range(n):
+        if graph[i][j] == 2:
+            virus.append((i, j))
+        if graph[i][j] == 0:
+            wall.append((i, j))
+
+wall_list = list(combinations(wall, 3))
+result = 0
+for i, j, k in wall_list:
+    ans = bfs(i,j,k)
+    result = max(result, ans)
 print(result)
