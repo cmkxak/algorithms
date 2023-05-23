@@ -2,10 +2,8 @@ def solution(s):
     answer = True
     stack = []
     for i in s:
-        if i == '(':
-            stack.append(i)
-        elif i == ')':
-            if len(stack) <=0:
-                return False
+        if stack and i == ')':
             stack.pop()
-    return not stack
+            continue
+        stack.append(i)
+    return len(stack) == 0
