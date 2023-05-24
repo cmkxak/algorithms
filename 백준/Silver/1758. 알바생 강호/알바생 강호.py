@@ -1,3 +1,5 @@
+import sys
+input = sys.stdin.readline
 n = int(input())
 people = []
 for i in range(n):
@@ -5,6 +7,7 @@ for i in range(n):
 
 people.sort(reverse=True)
 tip = 0
+
 for idx,val in enumerate(people):
     if val - ((idx+1)-1) < 0:
         continue
