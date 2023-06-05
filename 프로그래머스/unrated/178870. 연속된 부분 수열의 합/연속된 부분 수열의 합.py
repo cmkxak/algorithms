@@ -21,8 +21,3 @@ def solution(sequence, k):
         else:
             s+=1
     return result
-    
-
-    
-    answer.sort(key=lambda x: x[1] - x[0])
-    return answer[0]
