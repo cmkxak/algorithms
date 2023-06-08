@@ -2,19 +2,13 @@ def solution(data, col, row_begin, row_end):
     answer = 0
     
     #col번째 컬럼의 값을 기준으로 오름차순 정렬
-    data.sort(key=lambda x: x[0], reverse=True)
-    data.sort(key=lambda x : x[col-1])
+    data.sort(key=lambda x: (x[col-1], -x[0]))
     
-    sumList = []
     for i, val in enumerate(data):
         sum = 0
-        for j in val:
-            sum += j % (i+1)
-        sumList.append(sum)
-    print(sumList)
-    
-    for i in range(row_begin-1, row_end):
-        answer ^= sumList[i]
-        print(answer)
+        if row_begin-1 <= i <= row_end-1:
+            for j in val:
+                sum += j % (i+1)
+            answer ^= sum
     return answer
     
