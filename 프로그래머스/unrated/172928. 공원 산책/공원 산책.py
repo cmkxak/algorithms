@@ -1,4 +1,3 @@
-
 def check(x,y,park):
     if x<0 or y<0 or x>=len(park) or y>=len(park[0]):
         return True
@@ -8,6 +7,7 @@ def check(x,y,park):
 
 dx = [-1,1,0,0]
 dy = [0,0,-1,1]
+
 def move(x,y,park,routes):
     for route in routes:
         dir = route[0]
@@ -58,13 +58,10 @@ def move(x,y,park,routes):
         
 def solution(park, routes):
     answer = []
-    for i,p in enumerate(park):
-        park[i] = list(p)
         
     for i in range(len(park)):
         for j in range(len(park[0])):
             if park[i][j] == "S":
-                x,y=move(i,j,park,routes)        
-                answer.append(x)
-                answer.append(y)
+                x,y=move(i,j,park,routes)
+                answer.extend([x,y])
     return answer
