@@ -2,28 +2,28 @@ from collections import deque
 
 dx=[-1,1,0,0]
 dy=[0,0,-1,1]
-def bfs(i,j,board,cnt,visited):
+def bfs(i,j,board,visited):
+    answer = 1
     queue =deque()
-    queue.append((i,j,cnt))
+    queue.append((i,j))
     
     while queue:
-        x,y,c = queue.popleft()
-        
-        if board[x][y] == 'G':
-            return c
+        x,y = queue.popleft()
         
         for i in range(4):
-            nx = x
-            ny = y
-            while 0<= nx + dx[i] <len(board) and 0<= ny+dy[i] < len(board[0]) and board[nx+dx[i]][ny+dy[i]] != 'D':
-                nx += dx[i]
-                ny += dy[i]
-                
-            if not visited[nx][ny]:
-                print(nx,ny)
-                visited[nx][ny] = 1
-                queue.append((nx,ny, c + 1))
-    return -1
+            nx = x + dx[i]
+            ny = y + dy[i]
+            if 0<=nx<len(board) and 0<=ny<len(board[0]):
+                if board[nx][ny] == 'G':
+                    break
+                if board[nx][ny] == 'D':
+                    break
+                if board[nx][ny] == '.' and not visited[nx][ny]:
+                    print(nx,ny)
+                    visited[nx][ny] = 1
+                    queue.append((nx,ny))
+                    answer+=1
+    return answer
             
 def solution(board):
     answer = -1
@@ -32,5 +32,5 @@ def solution(board):
     for i in range(len(board)):
         for j in range(len(board[0])):
             if board[i][j] == 'R':
-                answer = bfs(i,j,board,0,visited)
+                answer = bfs(i,j,board,visited)
     return answer
