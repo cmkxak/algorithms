@@ -1,14 +1,12 @@
 def solution(players, callings):
-    pDict = {}
-    rDict = {}
-    for rank, player in enumerate(players):
-        pDict[player] = rank
-        rDict[rank] = player
-        
+    answer = []
+    pDict = {player:rank for rank, player in enumerate(players)}
+    rDict = {rank : player for rank,player in enumerate(players)}
+    
     for call in callings:
-        nowRank = pDict[call]
+        now = pDict[call] #해설자가 부른 선수의 현재 등수를 가져온다.
         
-        pDict[rDict[nowRank]], pDict[rDict[nowRank-1]] = pDict[rDict[nowRank-1]], pDict[rDict[nowRank]]
-        rDict[nowRank], rDict[nowRank-1] = rDict[nowRank-1], rDict[nowRank]
-        
-    return list(rDict.values())
+        pDict[rDict[now]], pDict[rDict[now-1]] = pDict[rDict[now-1]], pDict[rDict[now]]
+        rDict[now], rDict[now-1] = rDict[now-1], rDict[now]
+    return list(rDict.values())    
+    
