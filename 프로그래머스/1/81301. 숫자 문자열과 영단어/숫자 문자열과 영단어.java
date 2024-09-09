@@ -16,6 +16,7 @@ class Solution {
         
         for (int i = 0; i< info.size(); i++){
             if (s.contains(info.get(i))){
+                System.out.println(info.get(i));
                 s = s.replaceAll(info.get(i), Integer.toString(i));
             }
         }
