@@ -1,21 +1,19 @@
 import java.util.*;
 
 class Solution {
-    private static List<int[]> arr = new ArrayList<>();
-
+    private static ArrayList<int[]> moveInfo = new ArrayList<>();
+    
     public int[][] solution(int n) {
-        move(n, 1, 2, 3);
-        int[][] answer = arr.stream()
-                .toArray(int[][]::new);
-        return answer;
+        hanoi(1, 2, 3, n);
+        
+        return moveInfo.toArray(new int[moveInfo.size()][]);
     }
-
-    private static void move(int cnt, int start, int mid, int end) {
-        if (cnt == 0) {
-            return;
-        }
-        move(cnt - 1, start, end, mid);
-        arr.add(new int[]{start, end});
-        move(cnt - 1, mid, start, end);
+    
+    public void hanoi(int start, int m, int to, int n){
+        if (n == 0) return;
+        
+        hanoi(start, to, m, n-1);
+        moveInfo.add(new int[]{start, to});
+        hanoi(m, start, to, n-1);
     }
 }
