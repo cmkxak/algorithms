@@ -1,44 +1,56 @@
 import java.util.*;
 
-
 class Solution {
-   public int solution(int bridge_length, int weight, int[] truck_weights) {
+    
+    class Truck{
+        int weight;
+        int move;
+        
+        public Truck(int weight) {
+            this.weight = weight;
+            this.move = 1;
+        }
+        
+        public void moving() {
+            move++;
+        }
+    }
+    
+    public int solution(int bridge_length, int weight, int[] truck_weights) {
+        Queue<Truck> wait = new LinkedList<>();
+        Queue<Truck> move = new LinkedList<>();
+        
+        for (int w : truck_weights){
+            wait.add(new Truck(w));
+        }
+        
         int answer = 0;
-        int sum = 0;
-        
-        Queue<Integer> queue = new LinkedList();
-        
-        for (int i = 0; i < truck_weights.length; i++){
-            int truckWeight = truck_weights[i];
+        int curWeight = 0;
+        while (!wait.isEmpty() || !move.isEmpty()) {
+            answer += 1;
             
-            while(true) {
-                
-                //큐가 비어있는 경우 
-                if (queue.isEmpty()){ 
-                    answer+=1;
-                    sum += truckWeight;
-                    queue.add(truckWeight);
-                    break;
-                    
-                //큐가 가득찬 경우 
-                } else if (queue.size () == bridge_length){
-                    sum-=queue.poll();
-                
-                //큐에 원소를 추가할 수 있는 경우
-                } else {
-                    if (truckWeight + sum <= weight){
-                        queue.add(truckWeight);
-                        sum+= truckWeight;
-                        answer += 1;
-                        break;
-                } else {
-                        //!!! 핵심 : 무게가 넘는 경우 0을 넣어 기존의 존재하는 트럭이 강을 건너게 한다 //
-                        queue.offer(0);
-                        answer += 1;
-                    }
-                }
+            if (move.isEmpty()){
+                Truck truck = wait.poll();
+                curWeight += truck.weight;
+                move.add(truck);
+                continue;
+            }
+            
+            for (Truck t : move) {
+                t.moving();
+            }
+            
+            if (!wait.isEmpty() && curWeight + wait.peek().weight <= weight) {
+                Truck truck = wait.poll();
+                curWeight += truck.weight;
+                move.add(truck);
+            }
+            
+            if (move.peek().move >= bridge_length) {
+                Truck truck = move.poll();
+                curWeight -= truck.weight;
             }
         }
-        return answer + bridge_length;
+        return answer + 1;
     }
 }
