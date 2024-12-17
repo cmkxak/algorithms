@@ -1,29 +1,60 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.StringTokenizer;
 
 public class Main {
 
-    public static void main(String[] args) throws Exception {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String s = br.readLine().toUpperCase();
+    public static void main(String[] args) {
+        FastScan fastScan = new FastScan();
+        HashMap<Character, Integer> wordCountMap = new HashMap<>();
 
-        int arr[] = new int[26];
+        int max = 0;
+        int maxCnt = 0;
 
-        for (int i = 0; i < s.length(); i++) {
-            arr[s.charAt(i) - 65]++;
+        String input = fastScan.next().toUpperCase();
+
+        for (char c : input.toCharArray()) {
+            wordCountMap.put(c, wordCountMap.getOrDefault(c, 0) + 1);
         }
 
-        int max = Integer.MIN_VALUE;
-        char ch = '?';
-
-        for (int i = 0; i < arr.length; i++) {
-            if (max < arr[i]) {
-                max = arr[i];
-                ch = (char) (i + 65);
-            } else if (max == arr[i]) {
-                ch = '?';
+        String ans = "";
+        for (char c : wordCountMap.keySet()){
+            if (wordCountMap.get(c) > max) {
+                max = wordCountMap.get(c);
+                ans = String.valueOf(c);
             }
+
         }
-        System.out.println(ch);
+
+        for (int cnt : wordCountMap.values()) {
+            if (max == cnt) maxCnt++;
+        }
+
+        ans = maxCnt > 1 ? "?" : ans;
+        System.out.println(ans);
+    }
+
+
+    static class FastScan {
+        BufferedReader br;
+        StringTokenizer st;
+
+        public FastScan() {
+            this.br = new BufferedReader(new InputStreamReader(System.in));
+        }
+
+        String next() {
+            if (st == null || !st.hasMoreElements()) {
+                try {
+                    st = new StringTokenizer(br.readLine());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return st.nextToken();
+        }
     }
 
 }
