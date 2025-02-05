@@ -1,96 +1,106 @@
-import java.util.*; 
+import java.util.*;
 
 class Solution {
+    
+    private static List<Point> points = new ArrayList<>();
+    
     public String[] solution(int[][] line) {
-        //1. 직선의 교점들을 구하고, 그 중 정수 교점만 리스트에 넣어준다.
-        List<Point> points = new ArrayList<>();
-        
-        for (int i = 0; i < line.length; i++){
+        for (int i = 0; i < line.length - 1; i++){
             for (int j = i + 1; j < line.length; j++){
-                Point p = interSection(line[i][0], line[i][1], line[i][2], line[j][0], line[j][1], line[j][2]);
-                if (p != null) points.add(p);
+                setInterSection(line[i], line[j]);
             }
         }
         
-        //최대,최소 길이를 구해주어 최소 직사각형의 크기를 구해준다.
-        Point max = getMaximumPoint(points);
-        Point min = getMinimumPoint(points);
-        System.out.println(max.x);
-        System.out.println(max.y);
-        System.out.println(min.x);
-        System.out.println(min.y);
+        Point minimumPoint = getMinimumPoint();
+        Point maximumPoint = getMaximumPoint();
         
-        //격자판은 무한히 넓으니 모든 별을 포함하는 최소한의 크기만 나타내면 된다.
-        int width = (int) (max.x - min.x + 1); 
-        int height = (int) (max.y - min.y + 1);
+        int width = (int) (maximumPoint.x - minimumPoint.x + 1);
+        int height = (int) (maximumPoint.y - minimumPoint.y + 1);
         
-        char[][] c = new char[height][width];
+        char[][] arr = new char[height][width];
         
-        System.out.println(width);
-        System.out.println(height);
-        
-        for (char[] arr : c){
-            Arrays.fill(arr, '.');
+        for (char[] row : arr) {
+            Arrays.fill(row, '.');
         }
         
         for (Point p : points){
-            int x = (int) (p.x - min.x);
-            int y = (int) (max.y - p.y);
-            
-            c[y][x] = '*';
+            int x = (int) (p.x - minimumPoint.x);
+            int y = (int) (maximumPoint.y - p.y);
+            arr[y][x] = '*';
         }
         
-        String result[] = new String[c.length];
-        for (int i = 0; i< result.length; i++){
-            result[i] = new String(c[i]);
+        String answer[] = new String[arr.length];
+        
+        for (int i =0; i < answer.length; i++){
+            answer[i] = new String(arr[i]);
         }
         
-        
-        return result;
+        return answer;
     }
     
-    private Point getMaximumPoint(List<Point> points){
-        long x = Long.MIN_VALUE;
-        long y = Long.MIN_VALUE;
-        
-        for (Point p : points){
-            if (p.x > x) x = p.x;
-            if (p.y > y) y = p.y;
-        }
-        return new Point(x, y);
-    }
-    
-    private Point getMinimumPoint(List<Point> points){
+    private Point getMinimumPoint(){
         long x = Long.MAX_VALUE;
         long y = Long.MAX_VALUE;
         
-        for (Point p : points){
-            if (p.x < x) x = p.x;
-            if (p.y < y) y = p.y;
+        for (Point point : points) {
+            if (x > point.x) x = point.x;
+            if (y > point.y) y = point.y;
         }
-        return new Point(x, y);
+        
+        return new Point(x,y);
     }
+    
+    private Point getMaximumPoint(){
+        long x = Long.MIN_VALUE;
+        long y = Long.MIN_VALUE;
         
+        for (Point point : points) {
+            if (x < point.x) x = point.x;
+            if (y < point.y) y = point.y;
+        }
         
-    //주어진 직선 정보들을 통해 두 직선의 교점을 구해준다.
-    private Point interSection(long a, long b, long e, long c, long d, long f){
-        double x = (double) (b * f - e * d) / (a * d - b * c);
-        double y = (double) (e * c - a * f) / (a * d - b * c);
-        if (x % 1 != 0 || y % 1 != 0){
-            return null;
-        }   
-        return new Point((long) x, (long)y);
-    } 
+        return new Point(x,y);
+    }
+    
+    public void setInterSection(int[] line1, int[] line2){
+        long a = line1[0];
+        long b = line1[1];
+        long e = line1[2]; 
+        
+        long c = line2[0];
+        long d = line2[1];
+        long f = line2[2];        
+        
+        long x = 1000;
+        long y = 1000;
+        
+        long divideNum = (a * d) - (b * c);
+        
+        if (divideNum != 0) {
+            if (((b * f) - (e * d)) % ((a * d) - (b * c)) == 0)
+                x = ((b * f) - (e * d)) / ((a * d) - (b * c));
+        
+            if (((e * c) - (a * f)) % ((a * d) - (b * c)) == 0)
+                y = ((e * c) - (a * f)) / ((a * d) - (b * c));
+        }
+        
+        //x,y가 정수이면 * 표시를 위해 points 리스트에 add.
+        if (x != 1000 && y != 1000)
+            points.add(Point.createPoint(x,y));
+    }
     
     
-    //교점을 구하기 위한 클래스 생성
-    static class Point{
+    
+    static class Point {
         long x;
         long y;
         
         public Point(long x, long y){
             this.x = x;
             this.y = y;
+        }
+        public static Point createPoint(long x, long y){
+            return new Point(x, y);
         }
     }
 }
