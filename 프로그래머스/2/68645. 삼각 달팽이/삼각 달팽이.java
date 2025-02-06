@@ -1,46 +1,47 @@
 import java.util.*;
 
 class Solution {
-    private static final int dx[] = {0,1,-1};
-    private static final int dy[] = {1,0,-1};
     
+    private static final int[]dx = {0,1,-1};
+    private static final int[]dy = {1,0,-1};
     public int[] solution(int n) {
         
-        int[][] answer = new int[n][n];
+        int[][] graph = new int[n][n];
         
-        int x =0;
-        int y =0;
-        int i = 1;
-        int d = 0;
-        
-        while(true){
+        int x =0, y = 0;
+        int v = 1;
+        int i = 0;
+
+        while (true) {
             
-            answer[y][x] = i++;
-            int nx = x + dx[d];
-            int ny = y + dy[d];
+            graph[y][x] = v++;
             
-            if (ny == n || nx == n || answer[ny][nx] !=0 ){
-                //방향 전환
-                d = (d+1) % 3;
-                nx = x + dx[d];
-                ny = y + dy[d];
+            int nx = x + dx[i];
+            int ny = y + dy[i];
+            
+            if (nx == n || ny == n ||  nx == -1 || ny == -1 || graph[ny][nx] != 0) {
+                i = (i + 1) % 3;
+                nx = x + dx[i];
+                ny = y + dy[i];
                 
-                //전환된 방향으로도 진행을 하지 못하는 경우 : 마지막 숫자의 경우
-                if(ny == n || nx == n || answer[ny][nx] !=0 ) break;  
+                if (nx == n || ny == n || nx == -1 || ny == -1 || graph[ny][nx] != 0) {
+                    break;
+                }
             }
-            x = nx;
             y = ny;
+            x = nx;
         }
         
+        int[] answer = new int[v - 1];
         
-        int result[] = new int[i-1];
         int idx = 0;
-        for (int k =0; k< n; k++){
+        for (int k =0; k<n; k++){
             for (int j = 0; j <= k; j++){
-                result[idx++] = answer[k][j];
+                answer[idx++] = graph[k][j]; 
             }
         }
         
-        return result;
+        
+        return answer;
     }
 }
