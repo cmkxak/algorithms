@@ -1,12 +1,16 @@
+import java.util.*;
+
 class Solution {
     public int[] solution(long n) {
-        String str = Long.toString(n);
-        String reversed = new StringBuilder(str).reverse().toString();
-        char[] c = reversed.toCharArray();
-        int[] answer = new int[c.length];
-        for(int i = 0; i<c.length; i++){
-            answer[i] = c[i] - '0';
+        String strValue = Long.toString(n);
+
+        int[] answer = new int[strValue.length()];
+        
+        for (int i = 0; i < strValue.length(); i++){
+            answer[i] = (int) strValue.charAt(strValue.length() - 1 - i) - 48;
         }
+        
+        
         return answer;
     }
 }
