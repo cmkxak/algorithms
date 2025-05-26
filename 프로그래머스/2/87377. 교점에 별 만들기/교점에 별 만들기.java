@@ -1,106 +1,101 @@
 import java.util.*;
 
 class Solution {
-    
-    private static List<Point> points = new ArrayList<>();
-    
     public String[] solution(int[][] line) {
-        for (int i = 0; i < line.length - 1; i++){
+        List<Point> intersactions = new ArrayList<>();
+        
+        for (int i =0; i < line.length;i++) {
             for (int j = i + 1; j < line.length; j++){
-                setInterSection(line[i], line[j]);
+                int lines[] = line[i];
+                int lines2[] = line[j];
+                
+                Point point = interSection(lines[0], lines[1], lines[2], lines2[0], lines2[1], lines2[2]);
+                
+                //교점이 정수라면
+                if (point != null) {
+                    intersactions.add(point);
+                }
             }
         }
         
-        Point minimumPoint = getMinimumPoint();
-        Point maximumPoint = getMaximumPoint();
+        //2. 좌표의 최대 / 최소값 구하기
+        Point minPoint = getMinPoint(intersactions);
+        Point maxPoint = getMaxPoint(intersactions);
         
-        int width = (int) (maximumPoint.x - minimumPoint.x + 1);
-        int height = (int) (maximumPoint.y - minimumPoint.y + 1);
+        
+        //3. 구한 최대/최솟값으로 2차원 배열 생성
+        int width = (int) (maxPoint.x - minPoint.x + 1);
+        int height = (int) (maxPoint.y - minPoint.y + 1);
         
         char[][] arr = new char[height][width];
         
-        for (char[] row : arr) {
+        //4. 2차원 배열의 크기만큼 순회하며 '.'으로 초기화
+        for (char[] row : arr){
             Arrays.fill(row, '.');
-        }
-        
-        for (Point p : points){
-            int x = (int) (p.x - minimumPoint.x);
-            int y = (int) (maximumPoint.y - p.y);
+        }    
+            
+        //5. 2차원 배열에 별찍기
+        //2차원 배열에서 0,0은 실제 교점이 아님, 
+        //교점을 표현할 수 있는 가장 작은 크기로 2차원 배열 선언, 별을 제대로 표시하려면 좌표를 변환시켜야 한다
+        for (Point p : intersactions) {
+            int y = (int) (maxPoint.y - p.y);
+            int x = (int) (p.x - minPoint.x);
             arr[y][x] = '*';
         }
         
-        String answer[] = new String[arr.length];
+        //6. 2차원 배열 내 있는 문자들을 문자열 배열로 변환후 반환
+        String[] answer = new String[arr.length];
         
-        for (int i =0; i < answer.length; i++){
+        for (int i = 0; i < answer.length; i++){
             answer[i] = new String(arr[i]);
         }
         
         return answer;
     }
     
-    private Point getMinimumPoint(){
+    private Point getMinPoint(List<Point> points){
         long x = Long.MAX_VALUE;
         long y = Long.MAX_VALUE;
         
-        for (Point point : points) {
-            if (x > point.x) x = point.x;
-            if (y > point.y) y = point.y;
+        for (Point p : points) {
+            if (p.x < x) x = p.x;
+            if (p.y < y) y = p.y;
         }
         
         return new Point(x,y);
     }
     
-    private Point getMaximumPoint(){
+    private Point getMaxPoint(List<Point> points){
         long x = Long.MIN_VALUE;
         long y = Long.MIN_VALUE;
         
-        for (Point point : points) {
-            if (x < point.x) x = point.x;
-            if (y < point.y) y = point.y;
+        for (Point p : points) {
+            if (p.x > x) x = p.x;
+            if (p.y > y) y = p.y;
         }
         
         return new Point(x,y);
     }
     
-    public void setInterSection(int[] line1, int[] line2){
-        long a = line1[0];
-        long b = line1[1];
-        long e = line1[2]; 
+    private Point interSection(long a, long b, long e, long c, long d, long f) {
+        double x = (double) (b*f - e*d) / (a*d - b*c);
+        double y = (double) (e*c - a*f) / (a*d - b*c);
         
-        long c = line2[0];
-        long d = line2[1];
-        long f = line2[2];        
+        //정수가 아니면 null
+        if (x % 1 != 0 || y % 1 != 0) 
+            return null;
         
-        long x = 1000;
-        long y = 1000;
-        
-        long divideNum = (a * d) - (b * c);
-        
-        if (divideNum != 0) {
-            if (((b * f) - (e * d)) % ((a * d) - (b * c)) == 0)
-                x = ((b * f) - (e * d)) / ((a * d) - (b * c));
-        
-            if (((e * c) - (a * f)) % ((a * d) - (b * c)) == 0)
-                y = ((e * c) - (a * f)) / ((a * d) - (b * c));
-        }
-        
-        //x,y가 정수이면 * 표시를 위해 points 리스트에 add.
-        if (x != 1000 && y != 1000)
-            points.add(Point.createPoint(x,y));
+        return new Point((long) x, (long) y);
     }
     
     
-    
-    static class Point {
+    class Point {
         long x;
         long y;
         
         public Point(long x, long y){
             this.x = x;
             this.y = y;
-        }
-        public static Point createPoint(long x, long y){
-            return new Point(x, y);
         }
     }
 }
