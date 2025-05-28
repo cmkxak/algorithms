@@ -2,14 +2,18 @@ import java.util.*;
 
 class Solution {
     public int[] solution(long n) {
-        String strValue = Long.toString(n);
-
-        int[] answer = new int[strValue.length()];
+        String numStr = Long.toString(n);
         
-        for (int i = 0; i < strValue.length(); i++){
-            answer[i] = (int) strValue.charAt(strValue.length() - 1 - i) - 48;
+        int answer[] = new int[numStr.length()];
+        
+        StringBuilder sb = new StringBuilder(numStr);
+        sb.reverse();
+        String reversed = sb.toString();
+        
+        for (int i = 0 ; i < answer.length; i++) {
+            char c = reversed.charAt(i);
+            answer[i] = Integer.parseInt(Character.toString(c));
         }
-        
         
         return answer;
     }
