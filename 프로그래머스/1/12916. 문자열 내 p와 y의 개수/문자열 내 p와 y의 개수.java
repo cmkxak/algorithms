@@ -1,18 +1,18 @@
+import java.util.*;
+
 class Solution {
     boolean solution(String s) {
         boolean answer = true;
-
-        
-        s = s.toUpperCase();
         
         int cnt = 0;
-        for (char c : s.toCharArray()){
-            if (c == 'P')
+        s = s.toLowerCase();
+        for (char c : s.toCharArray()) {
+            if (c == 'p') 
                 cnt++;
-            else if (c == 'Y')
+            else if (c == 'y')
                 cnt--;
-        }
-        
-        return (cnt == 0) ? answer: !answer;
+        }        
+
+        return (cnt == 0) ? answer : !answer;
     }
 }
