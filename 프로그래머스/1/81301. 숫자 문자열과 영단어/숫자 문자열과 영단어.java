@@ -1,24 +1,14 @@
 import java.util.*;
 
 class Solution {
+    private static String[] words = {
+            "zero", "one", "two", "three", "four", "five",
+            "six", "seven", "eight", "nine"
+        };
+    
     public int solution(String s) {
-        ArrayList<String> info = new ArrayList<>();
-        info.add("zero");
-        info.add("one");
-        info.add("two");
-        info.add("three");
-        info.add("four");
-        info.add("five");
-        info.add("six");
-        info.add("seven");
-        info.add("eight");
-        info.add("nine");
-        
-        for (int i = 0; i< info.size(); i++){
-            if (s.contains(info.get(i))){
-                System.out.println(info.get(i));
-                s = s.replaceAll(info.get(i), Integer.toString(i));
-            }
+        for (int i = 0; i < words.length; i++){
+            s = s.replaceAll(words[i], Integer.toString(i));
         }
         return Integer.parseInt(s);
     }
