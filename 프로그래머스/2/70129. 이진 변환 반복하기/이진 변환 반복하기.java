@@ -1,20 +1,37 @@
 import java.util.*;
 
 class Solution {
+    private static int zeroCnt = 0;
+    private static int convertCnt = 0;
+    
     public int[] solution(String s) {
-        int cnt = 0;
-        int deletedCnt = 0;
+        int[] answer = new int[2];
         
-        while (true){
-            if (s.equals("1"))
+        while(true) {
+            if ("1".equals(s)) {
                 break;
-            int len = s.length();
-            s = s.replaceAll("0", "");
-            int changedLen = s.length();
-            s = Integer.toString(changedLen, 2);            
-            cnt++;
-            deletedCnt += (len - changedLen);
-        } 
-        return new int[]{cnt, deletedCnt};
+            }            
+            
+            String str = "";
+            int deletedCnt = 0;
+            for (int i = 0; i < s.length(); i++){
+            
+                if (s.charAt(i) == '0') {
+                    deletedCnt++;
+                } else {
+                    str+=s.charAt(i);
+                }
+            }
+            
+            s = Integer.toString(str.length(), 2);
+            str = "";   
+            convertCnt++;
+            zeroCnt+=deletedCnt;
+        }
+        
+        answer[0] = convertCnt;
+        answer[1] = zeroCnt;
+        
+        return answer;
     }
 }
