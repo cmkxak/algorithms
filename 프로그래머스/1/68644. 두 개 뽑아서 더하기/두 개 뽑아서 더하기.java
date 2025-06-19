@@ -1,24 +1,15 @@
 import java.util.*;
 
 class Solution {
-    
-    private static List<Integer> answer = new ArrayList<>();
-    
     public int[] solution(int[] numbers) {
+        Set<Integer> set = new TreeSet<>();
         
-        for (int i = 0; i < numbers.length; i++) {
-            int a = numbers[i];
-            for (int j = i+1; j < numbers.length; j++) {
-                int b = numbers[j];
-                if (!answer.contains(a+b))
-                    answer.add(a + b);
+        for (int i = 0; i < numbers.length; i++){
+            for (int j = i + 1; j < numbers.length; j++){
+                int sum = numbers[i] + numbers[j];
+                set.add(sum);
             }
         }
-        
-        Collections.sort(answer);
-        
-        //중복 제거 how ? 
-        
-        return answer.stream().mapToInt(Integer::intValue).toArray();
+        return set.stream().mapToInt(Integer::intValue).toArray();
     }
 }
